@@ -1,14 +1,14 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings - user </h2>
+    <h2> Watchlist </h2>
 
-    {% for item in activeListing %}    
+    {% for item in watchlist %}    
         <h4>
             <a href="{{ item.get_absolute_url }}"> {{item.title}}</a>
         </h4>
         <h6> description : {{item.description}}</h6>
-        <h6> current price : {{item.max_bid}}</h6>
+        <h4> current price : {{item.max_bid}}</h4>
         {% if item.image %}
             <img src="{{item.image.url}}"/>
         {% else %}

@@ -1,0 +1,42 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing detail for {{listing_detail.title}}</h2>
+
+        {% if listing_detail.image %}
+            <img src="{{listing_detail.image.url}}"/>
+        {% else %}
+            <img src="img/default.jpeg"/>
+        {% endif %}
+        <h6> Current price : {{listing_detail.max_bid}}</h6>
+        <h4> Comments </h4>
+        {% if new_comment %}
+            <p> Your new comment was added </p>
+        {% else %}
+            <p> Add new comment </p>
+            <form method='post'>
+                {{comment_form.as_p}}
+                {% csrf_token %}
+                <input type="submit" value="Add"></p>
+            </form>
+        {% endif %}      
+        {% for comment in comments %}
+            <p> {{ comment.comment }} </p>
+        {% empty %}
+            <p> There are no comments yet </p>
+        {% endfor %}
+
+    <ul class="nav">
+        {% if user.is_authenticated %}
+            {% if user in listing_detail.watchedBy.all %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auctions:removefrom_watchlist' listing_detail.id %}" >remove {{listing_detail.title}} from watch list</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auctions:addto_watchlist' listing_detail.id %}" >add {{listing_detail.title}} to watch list</a>
+                </li>
+            {% endif %}
+        {% endif %}
+    </ul>    
+{% endblock %}

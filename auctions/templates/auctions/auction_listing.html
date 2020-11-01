@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>Add an auction listing</h2>
+
+    {% if message_success %}
+        <div>{{ message_success }}</div>
+    {% endif %}
+    {% if message_failure %}
+        <div>{{ message_failure }}</div>
+    {% endif %}
+
+    <form action="{% url 'auctions:addAuctionListing' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{listing_form.as_p}}
+        <input class="btn btn-primary" type="submit" value="Save">
+    </form>
+
+{% endblock %}

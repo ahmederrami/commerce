@@ -1,18 +1,98 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings - user </h2>
+{% if not watchlist %}
+    <h2>Active Listings </h2>
+{% else %}
+    <h2> Watchlist </h2>
+{% endif %}
+<div class="container">
+    {% if wonListing %}
+        {% for item in wonListing %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    {% if item.image %}
+                        <img src="{{item.image.url}}"/>
+                    {% else %}
+                        <img src="/media/img/default.png"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="thumbnail">
+                    <h4>
+                        <a href="{{ item.get_absolute_url }}"> {{item.title}}</a>
+                    </h4>
+                    <h6> description : {{item.description}}</h6>
+                    <h6> current price : ${{item.max_bid}}</h6>
+                    <h6> owner : {{item.listedBy.username}}</h6>
+                    <h6> created : {{item.created}}</h6>
+                    <div class="alert alert-success">
+                        <strong style="color:red;"> Congrates !!! you are the winner. </strong>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+        {% endfor %}
+    {% endif %}
 
-    {% for item in activeListing %}    
-        <h4>
-            <a href="{{ item.get_absolute_url }}"> {{item.title}}</a>
-        </h4>
-        <h6> description : {{item.description}}</h6>
-        <h6> current price : {{item.max_bid}}</h6>
-        {% if item.image %}
-            <img src="{{item.image.url}}"/>
-        {% else %}
-            <img src="img/default.jpeg"/>
-        {% endif %}
-    {% endfor %}
+    {% if activeListing %}
+        {% for item in activeListing %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+
+                    {% if item.image %}
+                        <img src="{{item.image.url}}"/>
+                    {% else %}
+                        <img src="/media/img/default.png"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="thumbnail">
+                    <h4>
+                        <a href="{{ item.get_absolute_url }}"> {{item.title}}</a>
+                    </h4>
+                    <h6> description : {{item.description}}</h6>
+                    <h6> current price : ${{item.max_bid}}</h6>
+                    <h6> owner : {{item.listedBy.username}}</h6>
+                    <h6> created : {{item.created}}</h6>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if watchlist %}
+        {% for item in watchlist %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="thumbnail">
+                    {% if item.image %}
+                        <img src="{{item.image.url}}"/>
+                    {% else %}
+                        <img src="/media/img/default.png"/>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="thumbnail">
+                    <h4>
+                        <a href="{{ item.get_absolute_url }}"> {{item.title}}</a>
+                    </h4>
+                    <h6> description : {{item.description}}</h6>
+                    <h6> current price : ${{item.max_bid}}</h6>
+                    <h6> owner : {{item.listedBy.username}}</h6>
+                    <h6> created : {{item.created}}</h6>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+    {% endif %}   
+
 {% endblock %}

@@ -1,42 +1,116 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Listing detail for {{listing_detail.title}}</h2>
 
-        {% if listing_detail.image %}
-            <img src="{{listing_detail.image.url}}"/>
-        {% else %}
-            <img src="img/default.jpeg"/>
-        {% endif %}
-        <h6> Current price : {{listing_detail.max_bid}}</h6>
-        <h4> Comments </h4>
-        {% if new_comment %}
-            <p> Your new comment was added </p>
-        {% else %}
-            <p> Add new comment </p>
-            <form method='post'>
-                {{comment_form.as_p}}
-                {% csrf_token %}
-                <input type="submit" value="Add"></p>
-            </form>
-        {% endif %}      
-        {% for comment in comments %}
-            <p> {{ comment.comment }} </p>
-        {% empty %}
-            <p> There are no comments yet </p>
-        {% endfor %}
+<div class="container">
 
-    <ul class="nav">
-        {% if user.is_authenticated %}
-            {% if user in listing_detail.watchedBy.all %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:removefrom_watchlist' listing_detail.id %}" >remove {{listing_detail.title}} from watch list</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:addto_watchlist' listing_detail.id %}" >add {{listing_detail.title}} to watch list</a>
-                </li>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                {% if listing_detail.image %}
+                    <img src="{{listing_detail.image.url}}" style="width:100%">
+                {% else %}
+                    <img src="/media/img/default.png" style="width:100%">
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="thumbnail">
+            <h2><i>{{listing_detail.title}}</i></h2>
+                <ul>                    
+                    <li>Description : {{listing_detail.description}}</li>
+                    <li>Current price : ${{listing_detail.max_bid}}</li>
+                    <li>Owner : {{listing_detail.listedBy.username}}</li>
+                    <li>Created : {{listing_detail.created}}</li>
+                </ul>
+            </div>
+
+            {% if user.is_authenticated %}
+                {% if listing_detail in user.watchedListings.all %}
+                
+                    <div class="thumbnail">
+                        <a href="{% url 'auctions:removefrom_watchlist' listing_detail.id %}" class="btn btn-primary">Remove from watch list</a>
+                    </div>
+                
+                {% else %}
+                    {% if user != listing_detail.listedBy %}
+                    
+                        <div class="thumbnail">
+                            <a href="{% url 'auctions:addto_watchlist' listing_detail.id %}" class="btn btn-primary">Add to watch list</a>
+                        </div>
+                    
+                    {% else %}
+                    
+                        <div class="thumbnail">
+                            <a href="{% url 'auctions:close_listing' listing_detail.id %}" class="btn btn-primary">Close listing</a>
+                        </div>
+                                    
+                    {% endif%}
+                {% endif %}
             {% endif %}
+        </div>
+    </div>
+    {% if message_success or message_failure %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="thumbnail">
+                    {% if message_success %}
+                        <div class="alert alert-success"> 
+                            {{ message_success }}
+                        </div>
+                    {% endif %}
+                    {% if message_failure %}
+                        <div class="alert alert-danger"> 
+                            {{ message_failure }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+        {% if listing_detail.closed == False %}
+            {% if user != listing_detail.listedBy %}
+                <div class="row">                
+                    <div class="col-md-12">
+                        <div class="thumbnail">
+                            <h4> Bids </h4>
+                            <p> Add new bid </p>
+                            <form method='post'>
+                                {{bid_form.as_p}}
+                                {% csrf_token %}
+                                <input type="submit" value="Add new bid"></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}        
+            <div class="row">
+                <div class="col-md-12">
+                    <h4> Comments </h4>
+                    <p> Add new comment </p>
+                    <form method='post'>
+                        {{comment_form.as_p}}
+                        {% csrf_token %}
+                        <input type="submit" value="Add new comment"></p>
+                    </form>
+                </div>                  
+            </div>
         {% endif %}
-    </ul>    
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+            {% for comment in listing_detail.comments.all %}
+                <div class="thumbnail">
+                    <strong> {{ comment.commentedBy.username }} - {{comment.commentDate}} </strong>
+                    <p style="background-color:rgba(220,220,220,0.5);"> {{ comment.comment }} </p>
+                </div>
+            {% empty %}
+                    <p> There are no comments yet </p>
+            {% endfor %}
+        </div>
+    </div>        
+</div>
+
 {% endblock %}

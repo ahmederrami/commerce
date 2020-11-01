@@ -1,5 +1,10 @@
 from django import forms
-from .models import Bid, Comment
+from .models import AuctionListing, Bid, Comment
+
+class AuctionListingForm(forms.ModelForm):
+    class Meta:
+        model = AuctionListing
+        fields =("title","description","startingBid","image","category",)
 
 class BidForm(forms.ModelForm):
     class Meta:

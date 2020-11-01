@@ -15,4 +15,7 @@ What's more, I can add a comment and the system informs me that my comment was a
 on the listing.
 If the current user is the one who created the listing, he has the ability to close it. This makes the highest bidder the winner of the auction and makes the
 listing no longer active. So the closed listing doesn't appear on the active listing page and the winner is informed that he won the auction.
-5- If the current user has registered some listnigs on his watchlist, he can view them on 
+5- If the current user has registered some listings on his watchlist, he can view them. Clicking on any of those listings takes the user to that listing’s page.
+6- Users is able to visit a page that displays a list of all listing categories. Clicking on the name of any category should take the user to a page that displays all of the active listings in that category.
+7- Via the Django admin interface, a site administrator is able to view, add, edit, and delete any
+listings, comments, and bids made on the site.
